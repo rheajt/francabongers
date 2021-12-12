@@ -1,84 +1,53 @@
 import Sketch from "react-p5";
 import p5Types from "p5";
 import useWindowDimensions from "./utils/useWindowDimensions";
+// import { useState } from "react";
 
 const getRand = (r: number) => {
     return Math.floor(Math.random() * r + 1);
 };
 
 const getColor = () => {
-    const colors = [
-        "red",
-        "orange",
-        "yellow",
-        "green",
-        "blue",
-        "indigo",
-        "violet",
-    ];
+    // const colors = ["red", "orange", "yellow", "blue", "indigo", "violet"];
 
-    return colors[Math.floor(Math.random() * colors.length)];
+    return [getRand(255), getRand(255), getRand(255)];
+
+    // return ;
 };
 
 export const FlowerSketch = () => {
     const { height, width } = useWindowDimensions();
+    let deets = [[width / 2, height - 200, 200, getColor()]];
+
+    const plantFlower = () => {
+        if (deets.length > 30) {
+            deets.splice(0, 1);
+        }
+
+        deets.push([getRand(width), getRand(height - 120), 120, getColor()]);
+    };
 
     const setup = (p5: p5Types, canvasParentRef: Element) => {
         p5.createCanvas(width, height).parent(canvasParentRef);
+        setInterval(() => {
+            plantFlower();
+        }, 500);
     };
 
-    const deets = [
-        [getRand(width), getRand(height - 200), 200, getColor()],
-        [getRand(width), getRand(height - 200), 200, getColor()],
-        [getRand(width), getRand(height - 200), 200, getColor()],
-        [getRand(width), getRand(height - 200), 200, getColor()],
-        [getRand(width), getRand(height - 200), 200, getColor()],
-        [getRand(width), getRand(height - 200), 200, getColor()],
-        [getRand(width), getRand(height - 200), 200, getColor()],
-        [getRand(width), getRand(height - 200), 200, getColor()],
-        [getRand(width), getRand(height - 200), 200, getColor()],
-        [getRand(width), getRand(height - 200), 200, getColor()],
-        [getRand(width), getRand(height - 200), 200, getColor()],
-        [getRand(width), getRand(height - 200), 200, getColor()],
-        [getRand(width), getRand(height - 200), 200, getColor()],
-        [getRand(width), getRand(height - 200), 200, getColor()],
-        [getRand(width), getRand(height - 200), 200, getColor()],
-        [getRand(width), getRand(height - 200), 200, getColor()],
-        [getRand(width), getRand(height - 200), 200, getColor()],
-        [getRand(width), getRand(height - 200), 200, getColor()],
-        [getRand(width), getRand(height - 200), 200, getColor()],
-        [getRand(width), getRand(height - 200), 200, getColor()],
-        [getRand(width), getRand(height - 200), 200, getColor()],
-        [getRand(width), getRand(height - 200), 200, getColor()],
-        [getRand(width), getRand(height - 200), 200, getColor()],
-        [getRand(width), getRand(height - 200), 200, getColor()],
-        [getRand(width), getRand(height - 200), 200, getColor()],
-        [getRand(width), getRand(height - 200), 200, getColor()],
-        [getRand(width), getRand(height - 200), 200, getColor()],
-        [getRand(width), getRand(height - 200), 200, getColor()],
-        [getRand(width), getRand(height - 200), 200, getColor()],
-        [getRand(width), getRand(height - 200), 200, getColor()],
-        [getRand(width), getRand(height - 200), 200, getColor()],
-        [getRand(width), getRand(height - 200), 200, getColor()],
-        // [getRand(width), getRand(height), 200, getColor()],
-    ];
     const draw = (p5: p5Types) => {
         p5.background("beige");
 
         // makeFlower(p5, [width / 2, 100, height - 100, "purple"]);
-        deets.forEach((e) => makeFlower(p5, e));
-        // makeFlower(p5, getRand(width), getRand(height), 120);
-        // makeFlower(p5, deets);
-        // makeFlower(p5, 150, 174, 120);
-        // makeFlower(p5, 150, 174, 120);
-        p5.scale(2);
+        deets.forEach((e) => {
+            makeFlower(p5, e);
+        });
     };
 
     return (
         <Sketch
             setup={setup}
             draw={draw}
-            mouseMoved={(p5: p5Types) => console.log(p5.mouseX, p5.mouseY)}
+            // mouseMoved={(p5: p5Types) => console.log(p5.mouseX, p5.mouseY)}
         />
     );
 };
@@ -90,10 +59,12 @@ function makeFlower(p5: p5Types, deets: any[]) {
     makeFace(p5, x, y, c);
 }
 
-function makeFace(p5: p5Types, x: number, y: number, c: string) {
+function makeFace(p5: p5Types, x: number, y: number, c: number[]) {
     makePetals(p5, x, y);
 
-    const color = p5.color(c);
+    const [r, g, b] = c;
+
+    const color = p5.color(r, g, b);
     p5.fill(color);
     p5.ellipse(x, y, 65, 65);
 }
