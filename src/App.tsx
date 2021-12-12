@@ -1,26 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+// import React from "react";
+import { useState } from "react";
+import TypeAnimation from "react-type-animation";
+import "./App.css";
+import { FlowerSketch } from "./FlowerSketch";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [stanza, setStanza] = useState(0);
+    const poem = [
+        "Once upon a time",
+        "there was a girl",
+        "she lived in beijing",
+    ];
+
+    return (
+        <>
+            <FlowerSketch />
+
+            <div className="container">
+                <h1>franca bongers</h1>
+                <TypeAnimation sequence={[poem[stanza], 1000]} wrapper="p" />
+                <button onClick={() => setStanza(stanza + 1)}>next</button>
+            </div>
+        </>
+    );
 }
 
 export default App;
